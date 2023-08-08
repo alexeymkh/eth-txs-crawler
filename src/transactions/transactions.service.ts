@@ -28,16 +28,7 @@ export class TransactionsService {
     page: number,
     offset: number,
   ): Promise<ITransaction[]> {
-    const {
-      lastBlockNumberFromCache,
-      lastBlockNumberFromOriginSource,
-      oldestBlockNumberOfCacheUpdateRecords,
-    } = await this.getTxsBlocksNumbersFromRepos(address);
-
-    if (
-      lastBlockNumberFromCache === lastBlockNumberFromOriginSource &&
-      startBlock >= oldestBlockNumberOfCacheUpdateRecords
-    ) {
+    if (await this.areRequestedTxsCached(address, startBlock)) {
       this.logger.log(`getTxs from cache for ${address}`);
       return this.cacheRepo.getTransactions(
         address,
@@ -61,6 +52,22 @@ export class TransactionsService {
       page,
       offset,
       'desc',
+    );
+  }
+
+  async areRequestedTxsCached(
+    address: string,
+    startBlock: number,
+  ): Promise<boolean> {
+    const {
+      lastBlockNumberFromCache,
+      lastBlockNumberFromOriginSource,
+      oldestBlockNumberOfCacheUpdateRecords,
+    } = await this.getTxsBlocksNumbersFromRepos(address);
+
+    return (
+      lastBlockNumberFromCache === lastBlockNumberFromOriginSource &&
+      startBlock >= oldestBlockNumberOfCacheUpdateRecords
     );
   }
 
