@@ -21,9 +21,8 @@ export class TransactionsController {
   @HttpCode(200)
   async getTxs(@Query() query: GetTxsQuery): Promise<{ txs: ITransaction[] }> {
     try {
-      const lowercasedAddress = query.address.toLowerCase();
       const txs = await this.transactionsService.getTxs(
-        lowercasedAddress,
+        query.address,
         query.startBlock,
         query.page,
         query.offset,

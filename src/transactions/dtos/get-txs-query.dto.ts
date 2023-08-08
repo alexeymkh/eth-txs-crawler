@@ -2,6 +2,7 @@ import { IsString, IsInt, Min, Max } from 'class-validator';
 import { Transform } from 'class-transformer';
 
 export class GetTxsQuery {
+  @Transform(({ value }) => value.toLowerCase())
   @IsString()
   address: string;
 
