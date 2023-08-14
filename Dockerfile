@@ -1,4 +1,4 @@
-FROM node:18.16.0 AS builder
+FROM node:18-alpine AS builder
 WORKDIR /app
 
 COPY package.json yarn.lock ./
@@ -8,11 +8,12 @@ COPY . .
 
 RUN yarn build
 
-FROM node:18.16.0
+FROM node:18-alpine
 WORKDIR /app
 
 COPY package.json yarn.lock ./
-RUN yarn install --production
+RUN yarn install --production && \
+    yarn cache clean
 
 COPY --from=builder /app/dist ./dist
 
