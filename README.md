@@ -1,4 +1,5 @@
 # Eth txs crawler
+It's an Etherscan API proxy server made for test task.
 
 1. Get Etherscan free API key: https://etherscan.io/apis
 2. Add your Etherscan API key to ETHERSCAN_API_KEY variable in .env file
